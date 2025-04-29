@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Web Scraper ✨</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Smart Web Scraper</h1>
+        <p class="subheading">Enter a URL to scrape and summarize the webpage instantly!</p>
+
+        <form id="scrapeForm">
+            <input type="text" id="url" name="url" placeholder="Enter a webpage URL..." required>
+            <button type="submit">Scrape & Summarize</button>
+        </form>
+
+        <div class="output-section">
+            <h2>📄 Scraped Content:</h2>
+            <pre id="scrapedContent">Waiting for content...</pre>
+
+            <h2>📝 Summary:</h2>
+            <pre id="summary">Waiting for summary...</pre>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('scrapeForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            const response = await fetch("/", {
+                method: "POST",
+                body: new URLSearchParams({ url })
+            });
+            const data = await response.json();
+            document.getElementById("scrapedContent").innerText = data.scraped_text || "No content scraped.";
+            document.getElementById("summary").innerText = data.summary || "No summary available.";
+        };
+    </script>
+</body>
+</html>
